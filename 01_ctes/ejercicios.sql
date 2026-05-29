@@ -36,11 +36,33 @@ INSERT INTO ventas VALUES
 -- ============================================================
 
 WITH ventas_vendedor AS (
-    SELECT vendedor, SUM(monto) as total
+    SELECT vendedor, SUM(monto) AS total
     FROM ventas
     GROUP BY vendedor
 )
 
-SELECT vendedor, total
+SELECT *
 FROM ventas_vendedor
 WHERE total > 10000;
+
+-- ============================================================
+-- EJERCICIO 2 — CTEs encadenadas
+-- Calcula el total de ventas por vendedor,
+-- luego calcula el promedio general de esos totales,
+-- y finalmente muestra solo los vendedores que están
+-- por encima del promedio.
+-- ============================================================
+
+WITH ventas_vendedor AS (
+    SELECT vendedor, SUM(monto) AS total
+    FROM ventas
+    GROUP BY vendedor
+),
+promedio_general AS (
+    SELECT AVG(total) AS promedio
+    FROM ventas_vendedor
+)
+
+SELECT v.vendedor,v.total,p.promedio
+FROM ventas_vendedor v, promedio_general p
+WHERE v.total > p.promedio;
