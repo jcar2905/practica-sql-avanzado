@@ -66,3 +66,23 @@ promedio_general AS (
 SELECT v.vendedor,v.total,p.promedio
 FROM ventas_vendedor v, promedio_general p
 WHERE v.total > p.promedio;
+
+-- ============================================================
+-- EJERCICIO 3 — CTE con Window Function ROW_NUMBER
+-- Genera un ranking de vendedores por total de ventas
+-- y muestra solo el top 2.
+-- ============================================================
+
+WITH ventas_vendedor AS (
+    SELECT vendedor, SUM(monto) AS total
+    FROM ventas
+    GROUP BY vendedor
+),
+ranking AS (
+    SELECT vendedor, total,
+           ROW_NUMBER() OVER (ORDER BY total DESC) AS posicion
+    FROM ventas_vendedor
+)
+SELECT *
+FROM ranking
+WHERE posicion = 2;
