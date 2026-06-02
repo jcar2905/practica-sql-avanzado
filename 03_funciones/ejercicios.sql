@@ -45,3 +45,33 @@ BEGIN
     );
 END;
 $$ LANGUAGE plpgsql;
+
+-- ============================================================
+-- EJERCICIO 2 — Función con lógica condicional
+-- Crea una función llamada clasificar_cliente que reciba
+-- un id_cliente y devuelva su clasificación según balance:
+-- Mayor a 50,000 → 'Alto valor'
+-- Entre 10,000 y 50,000 → 'Medio'
+-- Menor a 10,000 → 'Bajo'
+-- ============================================================
+
+CREATE FUNCTION clasificar_cliente(p_id_cliente INTEGER)
+RETURNS TEXT
+AS $$
+DECLARE
+    clasificacion TEXT;
+    balance REAL;
+BEGIN
+    balance := balance_final(p_id_cliente);
+
+    IF balance > 50000 THEN
+        clasificacion := 'Alto valor';
+    ELSIF balance >= 10000 THEN
+        clasificacion := 'Medio';
+    ELSE
+        clasificacion := 'Bajo';
+    END IF;
+
+    RETURN clasificacion;
+END;
+$$ LANGUAGE plpgsql;
